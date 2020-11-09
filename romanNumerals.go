@@ -1,5 +1,7 @@
 package romanNumerals
 
+import "strings"
+
 var romanArabic = map[string]int{
 	"I": 1,
 	"V": 5,
@@ -10,6 +12,13 @@ var romanArabic = map[string]int{
 	"M": 1000,
 }
 
-func convertRomanNumeralToArabic(roman string) int {
-	return romanArabic[roman]
+func convertRomanNumeralToArabic(romanNumerals string) int {
+	splitRomans := strings.Split(romanNumerals, "")
+	var total = 0
+
+	for i := len(splitRomans) - 1; i >= 0; i-- {
+		total += romanArabic[splitRomans[i]]
+	}
+
+	return total
 }
