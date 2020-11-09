@@ -42,6 +42,10 @@ func TestTwoThousandAndSix(t *testing.T) {
 	testMatchesExpected("MMVI", 2006, t)
 }
 
+func TestThreeThousandNineHundredAndNinetyNine(t *testing.T) {
+	testMatchesExpected("MMMCMXCIX", 3999, t)
+}
+
 func testMatchesExpected(roman string, expected int, t *testing.T) {
 	result := convertRomanNumeralToArabic(roman)
 	if result != expected {
