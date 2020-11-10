@@ -64,7 +64,7 @@ func TestThreeThousandNineHundredAndNinetyNine(t *testing.T) {
 
 const tooManyTimesError = "The same numeral can't be repeated more than three times in a row."
 const repeatedFivesError = "A five character can not be repeated"
-const repeatedReducerError = "Reducing characters can not be repeated"
+const repeatedReducerError = "Reducing characters can not be repeated or reduced"
 
 func TestTooManyConsecutives(t *testing.T) {
 	testErrorThrown("IIII", tooManyTimesError, t)
@@ -86,7 +86,7 @@ func TestTooManyReducersTen(t *testing.T) {
 	testErrorThrown("IIX", repeatedReducerError, t)
 }
 
-func TestTooManyReducersOneThousand(t *testing.T) {
+func TestTooManyReducersXCM(t *testing.T) {
 	testErrorThrown("XCM", repeatedReducerError, t)
 }
 
@@ -102,6 +102,28 @@ func testErrorThrown(roman, message string, t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected an error but got %v", res)
 	}
+	if err.Error() != message {
+		t.Errorf("Error message was %v but expected %v", err.Error(), message)
+	}
+}
+
+func TestInvalidReducerXM(t *testing.T) {
+	res, err := convertRomanNumeralToArabic("XM")
+	if err == nil {
+		t.Errorf("Expected an error but got %v", res)
+	}
+	message := "M can not be reduced by X"
+	if err.Error() != message {
+		t.Errorf("Error message was %v but expected %v", err.Error(), message)
+	}
+}
+
+func TestInvalidReducerCVX(t *testing.T) {
+	res, err := convertRomanNumeralToArabic("CVX")
+	if err == nil {
+		t.Errorf("Expected an error but got %v", res)
+	}
+	message := "X can not be reduced by V"
 	if err.Error() != message {
 		t.Errorf("Error message was %v but expected %v", err.Error(), message)
 	}
