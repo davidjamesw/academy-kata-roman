@@ -1,6 +1,8 @@
 package romanNumerals
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -108,22 +110,30 @@ func testErrorThrown(roman, message string, t *testing.T) {
 }
 
 func TestInvalidReducerXM(t *testing.T) {
-	res, err := convertRomanNumeralToArabic("XM")
-	if err == nil {
-		t.Errorf("Expected an error but got %v", res)
-	}
-	message := "M can not be reduced by X"
-	if err.Error() != message {
-		t.Errorf("Error message was %v but expected %v", err.Error(), message)
-	}
+	testInvalidReducer("XM", t)
 }
 
 func TestInvalidReducerCVX(t *testing.T) {
-	res, err := convertRomanNumeralToArabic("CVX")
+	testInvalidReducer("CVX", t)
+}
+
+func TestInvalidReducerIL(t *testing.T) {
+	testInvalidReducer("IL", t)
+}
+
+func TestInvalidReducerIM(t *testing.T) {
+	testInvalidReducer("IM", t)
+}
+
+func testInvalidReducer(roman string, t *testing.T) {
+	res, err := convertRomanNumeralToArabic(roman)
 	if err == nil {
 		t.Errorf("Expected an error but got %v", res)
 	}
-	message := "X can not be reduced by V"
+	splitRoman := strings.Split(roman, "")
+	roman1 := splitRoman[len(splitRoman)-1]
+	roman2 := splitRoman[len(splitRoman)-2]
+	message := fmt.Sprintf("%v can not be reduced by %v", roman1, roman2)
 	if err.Error() != message {
 		t.Errorf("Error message was %v but expected %v", err.Error(), message)
 	}
