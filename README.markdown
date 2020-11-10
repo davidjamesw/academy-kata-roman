@@ -1,6 +1,6 @@
 # Go Roman Numerals to Arabic Converter
 
-My first proper go at some Go. Done as part of a BBC codign challenge, see below for details:
+My first proper go at some Go. Done as part of a BBC coding challenge, see below for details:
 
 # Academy Coding Challenge #1
 
