@@ -58,41 +58,51 @@ func TestTwoThousandAndSix(t *testing.T) {
 	testMatchesExpected("MMVI", 2006, t)
 }
 
+func TestThreeThousandNineHundredAndNinetyNine(t *testing.T) {
+	testMatchesExpected("MMMCMXCIX", 3999, t)
+}
+
+const tooManyTimesError = "The same numeral can't be repeated more than three times in a row."
+const repeatedFivesError = "A five character can not be repeated"
+const repeatedReducerError = "Reducing characters can not be repeated"
+
 func TestTooManyConsecutives(t *testing.T) {
-	res, err := convertRomanNumeralToArabic("IIII")
-	if err == nil {
-		t.Errorf("Expected an error but got %v", res)
-	}
+	testErrorThrown("IIII", tooManyTimesError, t)
 }
 
 func TestTooManyConsecutivesInMiddleOfNumber(t *testing.T) {
-	res, err := convertRomanNumeralToArabic("MCCCCX")
-	if err == nil {
-		t.Errorf("Expected an error but got %v", res)
-	}
+	testErrorThrown("MCCCCX", tooManyTimesError, t)
 }
 
 func TestTooManyConsecutiveFives(t *testing.T) {
-	res, err := convertRomanNumeralToArabic("VV")
-	if err == nil {
-		t.Errorf("Expected an error but got %v", res)
-	}
+	testErrorThrown("VV", repeatedFivesError, t)
 }
 
 func TestTooManyConsecutiveFifties(t *testing.T) {
-	res, err := convertRomanNumeralToArabic("LL")
-	if err == nil {
-		t.Errorf("Expected an error but got %v", res)
-	}
+	testErrorThrown("LL", repeatedFivesError, t)
 }
 
-func TestThreeThousandNineHundredAndNinetyNine(t *testing.T) {
-	testMatchesExpected("MMMCMXCIX", 3999, t)
+func TestTooManyReducersTen(t *testing.T) {
+	testErrorThrown("IIX", repeatedReducerError, t)
+}
+
+func TestTooManyReducersOneThousand(t *testing.T) {
+	testErrorThrown("XCM", repeatedReducerError, t)
 }
 
 func testMatchesExpected(roman string, expected int, t *testing.T) {
 	result, _ := convertRomanNumeralToArabic(roman)
 	if result != expected {
 		t.Errorf("Was expecting %v but got %v", expected, result)
+	}
+}
+
+func testErrorThrown(roman, message string, t *testing.T) {
+	res, err := convertRomanNumeralToArabic(roman)
+	if err == nil {
+		t.Errorf("Expected an error but got %v", res)
+	}
+	if err.Error() != message {
+		t.Errorf("Error message was %v but expected %v", err.Error(), message)
 	}
 }
