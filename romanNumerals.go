@@ -1,4 +1,4 @@
-package romanNumerals
+package romannumerals
 
 import (
 	"errors"
@@ -62,7 +62,7 @@ func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 func validateRomanNumerals(romanNumerals []string) error {
 	for _, romanNumeral := range romanNumerals {
 		if romanArabic[romanNumeral] == 0 {
-			return errors.New("Roman Numeral contains at least one invalid character.")
+			return errors.New("Roman Numeral contains at least one invalid character")
 		}
 	}
 	return nil
@@ -71,14 +71,13 @@ func validateRomanNumerals(romanNumerals []string) error {
 func numberToAdd(arabicCurrent, arabicPrevious int) int {
 	if arabicCurrent < arabicPrevious {
 		return 0 - arabicCurrent
-	} else {
-		return arabicCurrent
 	}
+	return arabicCurrent
 }
 
 func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicCurrentIterations int) error {
 	if arabicCurrentIterations == 4 {
-		return errors.New("The same numeral can't be repeated more than three times in a row.")
+		return errors.New("The same numeral can't be repeated more than three times in a row")
 	}
 	if arabicCurrentIterations == 2 && (currentPair.arabic == 5 || currentPair.arabic == 50 || currentPair.arabic == 500) {
 		return errors.New("A five character can not be repeated")
@@ -94,7 +93,7 @@ func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicC
 				return errors.New("Reducing characters can not be repeated or reduced")
 			}
 			if (nextPair.arabic < currentPair.arabic) && (nextPair.arabic <= previousPair.arabic) {
-				return errors.New("A reducing numeral can only be used when the numeral it is reducing hasn't already been increased by an equivalent or higher numeral. For example, IXI or XMC.")
+				return errors.New("A reducing numeral can only be used when the numeral it is reducing hasn't already been increased by an equivalent or higher numeral. For example, IXI or VCX")
 			}
 		}
 	}
@@ -104,7 +103,6 @@ func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicC
 func numberOfIterations(arabicCurrent, arabicPrevious, arabicCurrentIterations int) int {
 	if arabicCurrent != arabicPrevious {
 		return 1
-	} else {
-		return arabicCurrentIterations + 1
 	}
+	return arabicCurrentIterations + 1
 }

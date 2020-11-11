@@ -1,4 +1,4 @@
-package romanNumerals
+package romannumerals
 
 import (
 	"fmt"
@@ -71,7 +71,7 @@ func testMatchesExpected(roman string, expected int, t *testing.T) {
 	}
 }
 
-const tooManyTimesError = "The same numeral can't be repeated more than three times in a row."
+const tooManyTimesError = "The same numeral can't be repeated more than three times in a row"
 const repeatedFivesError = "A five character can not be repeated"
 const repeatedReducerError = "Reducing characters can not be repeated or reduced"
 
@@ -147,13 +147,13 @@ func TestInvalidCharactersGivesError(t *testing.T) {
 		t.Errorf("Expected an error but got %v", res)
 		return
 	}
-	message := "Roman Numeral contains at least one invalid character."
+	message := "Roman Numeral contains at least one invalid character"
 	if err.Error() != message {
 		t.Errorf("Error message was %v but expected %v", err.Error(), message)
 	}
 }
 
-var invalidReducingCharacterMessage = "A reducing numeral can only be used when the numeral it is reducing hasn't already been increased by an equivalent or higher numeral. For example, IXI or XMC."
+var invalidReducingCharacterMessage = "A reducing numeral can only be used when the numeral it is reducing hasn't already been increased by an equivalent or higher numeral. For example, IXI or VCX"
 
 func TestReducingAnIncreasedValueGivesErrorIXI(t *testing.T) {
 	res, err := convertRomanNumeralToArabic("IXI")
