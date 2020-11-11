@@ -1,8 +1,9 @@
-package romannumerals
+package main
 
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -107,4 +108,18 @@ func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicC
 		}
 	}
 	return nil
+}
+
+func main() {
+	input := os.Args[1:]
+	if len(input) != 1 {
+		fmt.Println("Please provide exactly one Roman Numeral to convert!")
+		return
+	}
+	result, error := convertRomanNumeralToArabic(input[0])
+	if error != nil {
+		fmt.Println(error)
+	} else {
+		fmt.Println(result)
+	}
 }
