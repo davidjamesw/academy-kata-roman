@@ -32,6 +32,9 @@ type romanArabicPair struct {
 
 func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 	splitRomans := strings.Split(romanNumerals, "")
+	if error := validateRomanNumerals(splitRomans); error != nil {
+		return -1, error
+	}
 	var total, arabicCurrentIterations int
 	var previousReduced bool
 	var previousPair romanArabicPair
@@ -50,6 +53,15 @@ func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 		previousPair = currentPair
 	}
 	return total, nil
+}
+
+func validateRomanNumerals(romanNumerals []string) error {
+	for _, romanNumeral := range romanNumerals {
+		if romanArabic[romanNumeral] == 0 {
+			return errors.New("Roman Numeral contains at least one invalid character.")
+		}
+	}
+	return nil
 }
 
 func numberToAdd(arabicCurrent, arabicPrevious int) (int, bool) {
