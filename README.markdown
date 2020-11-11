@@ -1,6 +1,17 @@
 # Go Roman Numerals to Arabic Converter
 
-My first proper go at some Go. Done as part of a BBC coding challenge, see below for details:
+My first proper go at some Go. 
+
+Splits a given Roman Numeral and loops through the resulting slice in reverse order, adding or subtracting valid next numbers in the sequence.
+
+To run:
+* Clone this repository
+* Run `go build romanNumerals.go`
+* Run `./romanNumerals <INSERT ROMAN NUMERAL OF YOUR CHOICE>`
+
+The result will be printed to your console.
+
+Done as part of a BBC coding challenge, see below for details:
 
 # Academy Coding Challenge #1
 
