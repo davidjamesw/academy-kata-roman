@@ -103,6 +103,7 @@ func testErrorThrown(roman, message string, t *testing.T) {
 	res, err := convertRomanNumeralToArabic(roman)
 	if err == nil {
 		t.Errorf("Expected an error but got %v", res)
+		return
 	}
 	if err.Error() != message {
 		t.Errorf("Error message was %v but expected %v", err.Error(), message)
@@ -129,6 +130,7 @@ func testInvalidReducer(roman string, t *testing.T) {
 	res, err := convertRomanNumeralToArabic(roman)
 	if err == nil {
 		t.Errorf("Expected an error but got %v", res)
+		return
 	}
 	splitRoman := strings.Split(roman, "")
 	roman1 := splitRoman[len(splitRoman)-1]
@@ -143,9 +145,34 @@ func TestInvalidCharactersGivesError(t *testing.T) {
 	res, err := convertRomanNumeralToArabic("THISISINVALID")
 	if err == nil {
 		t.Errorf("Expected an error but got %v", res)
+		return
 	}
 	message := "Roman Numeral contains at least one invalid character."
 	if err.Error() != message {
 		t.Errorf("Error message was %v but expected %v", err.Error(), message)
+	}
+}
+
+var invalidReducingCharacterMessage = "A reducing numeral can only be used when the numeral it is reducing hasn't already been increased by an equivalent or higher numeral. For example, IXI or XMC."
+
+func TestReducingAnIncreasedValueGivesErrorIXI(t *testing.T) {
+	res, err := convertRomanNumeralToArabic("IXI")
+	if err == nil {
+		t.Errorf("Expected an error but got %v", res)
+		return
+	}
+	if err.Error() != invalidReducingCharacterMessage {
+		t.Errorf("Error message was %v but expected %v", err.Error(), invalidReducingCharacterMessage)
+	}
+}
+
+func TestReducingAnIncreasedValueGivesErrorCMCIX(t *testing.T) {
+	res, err := convertRomanNumeralToArabic("CMCIX")
+	if err == nil {
+		t.Errorf("Expected an error but got %v", res)
+		return
+	}
+	if err.Error() != invalidReducingCharacterMessage {
+		t.Errorf("Error message was %v but expected %v", err.Error(), invalidReducingCharacterMessage)
 	}
 }

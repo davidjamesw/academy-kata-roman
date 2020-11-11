@@ -36,7 +36,6 @@ func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 		return -1, error
 	}
 	var total, arabicCurrentIterations int
-	var previousReduced bool
 	var previousPair romanArabicPair
 	for i := len(splitRomans) - 1; i >= 0; i-- {
 		currentPair := romanArabicPair{
@@ -44,12 +43,17 @@ func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 			arabic: romanArabic[splitRomans[i]],
 		}
 		arabicCurrentIterations = numberOfIterations(currentPair.arabic, previousPair.arabic, arabicCurrentIterations)
-		if error := validateNumber(currentPair, previousPair, arabicCurrentIterations, previousReduced); error != nil {
+		var nextPair romanArabicPair
+		if i > 0 {
+			nextPair = romanArabicPair{
+				roman:  splitRomans[i-1],
+				arabic: romanArabic[splitRomans[i-1]],
+			}
+		}
+		if error := validateNumber(currentPair, previousPair, nextPair, arabicCurrentIterations); error != nil {
 			return -1, error
 		}
-		var arabicNumberToAdd int
-		arabicNumberToAdd, previousReduced = numberToAdd(currentPair.arabic, previousPair.arabic)
-		total += arabicNumberToAdd
+		total += numberToAdd(currentPair.arabic, previousPair.arabic)
 		previousPair = currentPair
 	}
 	return total, nil
@@ -64,28 +68,35 @@ func validateRomanNumerals(romanNumerals []string) error {
 	return nil
 }
 
-func numberToAdd(arabicCurrent, arabicPrevious int) (int, bool) {
+func numberToAdd(arabicCurrent, arabicPrevious int) int {
 	if arabicCurrent < arabicPrevious {
-		return 0 - arabicCurrent, true
+		return 0 - arabicCurrent
 	} else {
-		return arabicCurrent, false
+		return arabicCurrent
 	}
 }
 
-func validateNumber(currentPair, previousPair romanArabicPair, arabicCurrentIterations int, previousReduced bool) error {
+func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicCurrentIterations int) error {
 	if arabicCurrentIterations == 4 {
 		return errors.New("The same numeral can't be repeated more than three times in a row.")
 	}
 	if arabicCurrentIterations == 2 && (currentPair.arabic == 5 || currentPair.arabic == 50 || currentPair.arabic == 500) {
 		return errors.New("A five character can not be repeated")
 	}
-	validReducer := validReducers[previousPair.roman]
-	if currentPair.arabic < previousPair.arabic && (validReducer != currentPair.roman) {
-		errorMessage := fmt.Sprintf("%v can not be reduced by %v", previousPair.roman, currentPair.roman)
-		return errors.New(errorMessage)
-	}
-	if currentPair.arabic <= previousPair.arabic && previousReduced {
-		return errors.New("Reducing characters can not be repeated or reduced")
+	if previousPair.arabic != 0 {
+		validReducer := validReducers[previousPair.roman]
+		if currentPair.arabic < previousPair.arabic && (validReducer != currentPair.roman) {
+			errorMessage := fmt.Sprintf("%v can not be reduced by %v", previousPair.roman, currentPair.roman)
+			return errors.New(errorMessage)
+		}
+		if nextPair.arabic != 0 {
+			if currentPair.arabic < previousPair.arabic && nextPair.arabic <= currentPair.arabic {
+				return errors.New("Reducing characters can not be repeated or reduced")
+			}
+			if (nextPair.arabic < currentPair.arabic) && (nextPair.arabic <= previousPair.arabic) {
+				return errors.New("A reducing numeral can only be used when the numeral it is reducing hasn't already been increased by an equivalent or higher numeral. For example, IXI or XMC.")
+			}
+		}
 	}
 	return nil
 }
