@@ -5,6 +5,7 @@ My first proper go at some Go.
 Splits a given Roman Numeral and loops through the resulting slice in reverse order, adding or subtracting valid next numbers in the sequence.
 
 To run:
+* [Install Go](https://golang.org/doc/install)
 * Clone this repository
 * Run `go build romanNumerals.go`
 * Run `./romanNumerals <INSERT ROMAN NUMERAL OF YOUR CHOICE>`
