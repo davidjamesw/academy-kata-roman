@@ -35,20 +35,15 @@ func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 	if error := validateRomanNumerals(splitRomans); error != nil {
 		return -1, error
 	}
+
 	var total, arabicCurrentIterations int
 	var previousPair romanArabicPair
 	for i := len(splitRomans) - 1; i >= 0; i-- {
-		currentPair := romanArabicPair{
-			roman:  splitRomans[i],
-			arabic: romanArabic[splitRomans[i]],
-		}
+		currentPair := createPair(splitRomans[i])
 		arabicCurrentIterations = numberOfIterations(currentPair.arabic, previousPair.arabic, arabicCurrentIterations)
 		var nextPair romanArabicPair
 		if i > 0 {
-			nextPair = romanArabicPair{
-				roman:  splitRomans[i-1],
-				arabic: romanArabic[splitRomans[i-1]],
-			}
+			nextPair = createPair(splitRomans[i-1])
 		}
 		if error := validateNumber(currentPair, previousPair, nextPair, arabicCurrentIterations); error != nil {
 			return -1, error
@@ -59,13 +54,18 @@ func convertRomanNumeralToArabic(romanNumerals string) (int, error) {
 	return total, nil
 }
 
-func validateRomanNumerals(romanNumerals []string) error {
-	for _, romanNumeral := range romanNumerals {
-		if romanArabic[romanNumeral] == 0 {
-			return errors.New("Roman Numeral contains at least one invalid character")
-		}
+func createPair(roman string) romanArabicPair {
+	return romanArabicPair{
+		roman:  roman,
+		arabic: romanArabic[roman],
 	}
-	return nil
+}
+
+func numberOfIterations(arabicCurrent, arabicPrevious, arabicCurrentIterations int) int {
+	if arabicCurrent != arabicPrevious {
+		return 1
+	}
+	return arabicCurrentIterations + 1
 }
 
 func numberToAdd(arabicCurrent, arabicPrevious int) int {
@@ -73,6 +73,15 @@ func numberToAdd(arabicCurrent, arabicPrevious int) int {
 		return 0 - arabicCurrent
 	}
 	return arabicCurrent
+}
+
+func validateRomanNumerals(romanNumerals []string) error {
+	for _, romanNumeral := range romanNumerals {
+		if romanArabic[romanNumeral] == 0 {
+			return errors.New("Roman Numeral contains at least one invalid character")
+		}
+	}
+	return nil
 }
 
 func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicCurrentIterations int) error {
@@ -98,11 +107,4 @@ func validateNumber(currentPair, previousPair, nextPair romanArabicPair, arabicC
 		}
 	}
 	return nil
-}
-
-func numberOfIterations(arabicCurrent, arabicPrevious, arabicCurrentIterations int) int {
-	if arabicCurrent != arabicPrevious {
-		return 1
-	}
-	return arabicCurrentIterations + 1
 }
